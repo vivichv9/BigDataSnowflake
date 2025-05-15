@@ -1,0 +1,22 @@
+services:
+    postgres:
+      image: postgres:17
+      restart: unless-stopped
+      container_name: postgres
+      hostname: postgres
+      volumes:
+        - ./data/postgres:/var/lib/postgresql/data
+        - ./etc/mock_data:/tmp/mock_data
+        - ./etc/sql:/docker-entrypoint-initdb.d
+      environment:
+        POSTGRES_DB: 'lab1'
+        POSTGRES_USER: 'lab1'
+        POSTGRES_PASSWORD: 'password'
+      ports:
+        - 15432:5432
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U lab1 -d lab1"]
+        interval: 15s
+        timeout: 5s
+        retries: 5
+
